@@ -34,7 +34,9 @@ def ft(signal:torch.Tensor, dim:list, dx=False, zpad=False):
     else: # if sample spacing given, do fft along with returning frequency grid
         fs = 1/(ft_dims * dx) # inverse of sample rate
         return torch.fft.fftshift(torch.fft.fftn(torch.fft.ifftshift(signal, dim=dim), dim=dim), dim=dim
-        ) / torch.prod(ft_dims, 0), fs.numpy()
+        ) / torch.prod(ft_dims, 0) / fs, fs
+        # return torch.fft.fftshift(torch.fft.fftn(torch.fft.ifftshift(signal, dim=dim), dim=dim), dim=dim
+        # ) / torch.sqrt(torch.prod(1/(fs), 0)), fs
     
 
 
@@ -67,19 +69,16 @@ def ift(ft_signal:torch.Tensor, dim:list, df=False, zpad=0):
                                   ) * torch.prod(torch.as_tensor([ft_signal.shape[x] for x in dim]), 0)
     else: # if sample spacing given, do fft along with returning frequency grid
         fs = 1/(ift_dims * df) # inverse of sample rate
-        return torch.fft.fftshift(torch.fft.ifftn(torch.fft.ifftshift(ft_signal, dim=dim), dim=dim), dim=dim
-        ) * torch.prod(ift_dims, 0), fs.numpy()
-
-
-def linspace(a, b, N):
-    if a.ndim != b.ndim:
-        RuntimeError('a.ndim and b.ndim not equal')
-
-    
-
-
+        return torch.fft.fftshift(torch.fft.ifftn(torch.fft.ifftshift(ft_signal, dim=dim), dim=dim, norm='forward'), dim=dim
+        ) / torch.prod(ift_dims, 0) / fs, fs
+ 
 
 def linftspace(a, b, N):
+    if type(a) == torch.Tensor:
+        a = a.item()
+    if type(b) == torch.Tensor:
+        b = b.item()
+
     if N % 2: #odd
         return torch.linspace(a, b, N)
     else: #even
