@@ -1,11 +1,12 @@
 import torch
+import math
 from ft import ft, ift
+
 
 def rndsigcorr(corr, N):
     gen_dim = list(range(1,len(corr.shape)+1))
-
-    return ift(torch.sqrt(abs(ft(corr.unsqueeze(0), dim=gen_dim))) * (torch.randn((N, *corr.shape)) + 
-                                                     1j*torch.randn((N, *corr.shape))), dim=gen_dim).real
+    return ift(torch.sqrt(abs(ft(corr.unsqueeze(0), dim=gen_dim)[0])) * (torch.randn((N, *corr.shape)) + 
+                                                     1j*torch.randn((N, *corr.shape))), dim=gen_dim)[0].real
 
 
 def rndsigpsd(psd, N):

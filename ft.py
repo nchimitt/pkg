@@ -32,9 +32,9 @@ def ft(signal:torch.Tensor, dim:list, dx=False, zpad=False):
         return torch.fft.fftshift(torch.fft.fftn(torch.fft.ifftshift(signal, dim=dim), dim=dim), dim=dim
                                   ) / torch.prod(torch.as_tensor([signal.shape[x] for x in dim]), 0)
     else: # if sample spacing given, do fft along with returning frequency grid
-        fs = 1/(ft_dims * dx) # inverse of sample rate
+        df = 1/(ft_dims * dx) # inverse of sample rate
         return torch.fft.fftshift(torch.fft.fftn(torch.fft.ifftshift(signal, dim=dim), dim=dim), dim=dim
-        ) / torch.prod(ft_dims, 0) / fs, fs
+        ) / torch.prod(ft_dims, 0) / df, df
         # return torch.fft.fftshift(torch.fft.fftn(torch.fft.ifftshift(signal, dim=dim), dim=dim), dim=dim
         # ) / torch.sqrt(torch.prod(1/(fs), 0)), fs
     
@@ -68,9 +68,9 @@ def ift(ft_signal:torch.Tensor, dim:list, df=False, zpad=0):
         return torch.fft.fftshift(torch.fft.ifftn(torch.fft.ifftshift(ft_signal, dim=dim), dim=dim), dim=dim
                                   ) * torch.prod(torch.as_tensor([ft_signal.shape[x] for x in dim]), 0)
     else: # if sample spacing given, do fft along with returning frequency grid
-        fs = 1/(ift_dims * df) # inverse of sample rate
+        dx = 1/(ift_dims * df) # inverse of sample rate
         return torch.fft.fftshift(torch.fft.ifftn(torch.fft.ifftshift(ft_signal, dim=dim), dim=dim, norm='forward'), dim=dim
-        ) / torch.prod(ift_dims, 0) / fs, fs
+        ) / torch.prod(ift_dims, 0) / dx, dx
  
 
 def linftspace(a, b, N):

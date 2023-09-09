@@ -60,7 +60,7 @@ def gauss_ift():
 
 # def dft_linspace_issues():
 def ft_table():
-    T1, N1, a = 5, 501, 10
+    T1, N1, a = 5, 1001, 5
     t1 = ft.linftspace(-T1/2, T1/2, N1)
     s1 = torch.exp(-a*t1)
     s1[t1 < 0] = 0
@@ -118,7 +118,7 @@ def ft_table():
     plt.tight_layout()
     plt.savefig('tex/pix/ft_table_3.pdf')
 
-    T1, N1, a, f = 4, 101, 20, 5
+    T1, N1, a, f = 2, 101, 20, 3
     t1 = ft.linftspace(-T1/2, T1/2, N1)
     s1 = torch.cos(2*np.pi*f*t1)
     # s1[t1 < 0] = 0
@@ -139,8 +139,8 @@ def ft_table():
     plt.tight_layout()
     plt.savefig('tex/pix/ft_table_4.pdf')
 
-    print(torch.sum(S1[f1 < 0]), torch.sum(S1[f1 >= 0]))
-    
+    print(fs1*torch.amax(S1.real))
+
 
 if __name__ == "__main__":
     gauss_ft()
