@@ -1,3 +1,7 @@
 .venv/
 tex/
+<<<<<<< HEAD
 __pycache__/
+=======
+ipynb_tests/
+>>>>>>> 7a908a924f7ae0399f080f5179870804576fc26f
